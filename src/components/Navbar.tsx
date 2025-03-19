@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Button } from './ui/button';
 import { Menu, X, Shield, Download, Upload, Delete } from 'lucide-react';
-import { toast } from 'sonner';
-import { getCrimes, setCrime, clearLocalStorage } from '@/data';
+// import { toast } from 'sonner';
+import { getCrimes, setCrimes, clearLocalStorage } from '@/data';
 import { CrimeType } from '@/types';
 
 interface NavbarProps {
@@ -25,21 +25,23 @@ const Navbar = ({ currentPage, setCurrentPage }: NavbarProps) => {
       linkElement.setAttribute('href', dataUri);
       linkElement.setAttribute('download', exportFileDefaultName);
       linkElement.click();
-      
-      toast.success('Data exported successfully');
+      alert('Data exported successfully');
+      // refresh the page to show the latest data
+      window.location.reload();
     } catch (error) {
-      toast.error('Failed to export data');
+      alert('Failed to export data');
       console.error('Export error:', error);
     }
   };
  const handleDeleteAll = () => {
     const confirmDelete = window.confirm("Are you sure you want to delete all data?");
     if (confirmDelete) {
+      localStorage.removeItem('crimes');
       clearLocalStorage();
-      toast.success('All data deleted successfully');
-      setCrime({} as CrimeType); // Reset the state
+      alert('All data deleted successfully');
+      window.location.reload();
     } else {
-      toast.error('Data deletion canceled');
+      alert('Data deletion canceled');
     }
   };
   const handleImport = () => {
@@ -56,14 +58,11 @@ const Navbar = ({ currentPage, setCurrentPage }: NavbarProps) => {
         try {
           const content = event.target?.result as string;
           const data = JSON.parse(content).crimes as CrimeType[];
-
-          for (const crime of data) {
-            setCrime(crime);
-          }
-
-          toast.success('Data imported successfully');
+          setCrimes(data);
+          alert('Data imported successfully');
+          window.location.reload();
         } catch (error) {
-          toast.error('Failed to import data');
+          alert('Failed to import data');
           console.error('Import error:', error);
         }
       };
@@ -185,6 +184,14 @@ const Navbar = ({ currentPage, setCurrentPage }: NavbarProps) => {
           >
             <Upload className="mr-2" size={18} />
             Import Data
+          </Button>
+          <Button 
+            variant="outline"
+            onClick={handleDeleteAll}
+            className="w-full justify-start text-lg"
+          >
+            <Delete className="mr-2" size={18} />
+            Delete All Data
           </Button>
         </div>
       </div>
