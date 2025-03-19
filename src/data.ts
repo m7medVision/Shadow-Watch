@@ -207,9 +207,15 @@ export const clearLocalStorage = () => {
   }
 }
 
-export const searchCrimes = (query: string) => {
+export const searchCrimes = (query: string, searchType: "id" | "details" = "details" ) => {
   if (!checkLocalStorage()) return [];
   const currentData = JSON.parse(localStorage.getItem('crimes') || '[]') as CrimeType[];
+  if (searchType === "id") {
+    const filteredData = currentData.filter((crime: CrimeType) => {
+      return crime.id.toString().includes(query);
+    });
+    return filteredData;
+  }
   const filteredData = currentData.filter((crime: CrimeType) => {
     return (
       crime.report_details.toLowerCase().includes(query.toLowerCase())
