@@ -162,6 +162,10 @@ export const getCrimes = () => {
 export const setCrime = (crime: CrimeType) => {
   if (!checkLocalStorage()) return;
   const currentData = JSON.parse(localStorage.getItem('crimes') || '[]') as CrimeType[];
+  const dateTime = new Date();
+  const formattedDate = `${dateTime.getFullYear()}-${String(dateTime.getMonth() + 1).padStart(2, '0')}-${String(dateTime.getDate()).padStart(2, '0')}-${String(dateTime.getHours()).padStart(2, '0')}-${String(dateTime.getMinutes()).padStart(2, '0')}`;
+  crime.report_date_time = formattedDate;
+  crime.report_status = "Pending";
   currentData.push(crime);
   localStorage.setItem('crimes', JSON.stringify(currentData));
 }
