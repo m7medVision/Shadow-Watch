@@ -22,25 +22,25 @@
   - [x] Save filter preferences
 
 ## Phase 2: Crime Reporting System (Level 2)
-- [ ] Create Report Crime Form
-  - [ ] Design modal/slide-in form UI
-  - [ ] Implement form with required fields:
-    - [ ] Report details text input
-    - [ ] Crime type dropdown (Assault, Robbery, Homicide, Kidnapping)
-    - [ ] National ID number input with validation
-    - [ ] Longitude and Latitude fields
-  - [ ] Add form validation
-    - [ ] National ID (numbers only)
-    - [ ] Required fields validation
-    - [ ] Coordinate format validation
-- [ ] Form Submission Handling
-  - [ ] Auto-generate timestamp in required format (YYYY-MM-DD-HH-MM)
-  - [ ] Set default status to "Pending"
-  - [ ] Save new crime report to local storage
-  - [ ] Update map with newly added crime report without reload
-- [ ] "Report Crime" Button
-  - [ ] Create button UI that opens the form
-  - [ ] Implement open/close animation
+- [x] Create Report Crime Form
+  - [x] Design modal/slide-in form UI
+  - [x] Implement form with required fields:
+    - [x] Report details text input
+    - [x] Crime type dropdown (Assault, Robbery, Homicide, Kidnapping)
+    - [x] National ID number input with validation
+    - [x] Longitude and Latitude fields
+  - [x] Add form validation
+    - [x] National ID (numbers only)
+    - [x] Required fields validation
+    - [x] Coordinate format validation
+- [x] Form Submission Handling
+  - [x] Auto-generate timestamp in required format (YYYY-MM-DD-HH-MM)
+  - [x] Set default status to "Pending"
+  - [x] Save new crime report to local storage
+  - [x] Update map with newly added crime report without reload
+- [x] "Report Crime" Button
+  - [x] Create button UI that opens the form
+  - [x] Implement open/close animation
 
 ## Phase 3: Advanced Features (Level 3)
 - [ ] Interactive Location Selection
