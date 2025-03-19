@@ -1,6 +1,6 @@
 export interface CrimeType {
   id: number;
-  national_id: string;
+  national_id?: string;
   report_details: string;
   crime_type: string;
   report_date_time: string;
