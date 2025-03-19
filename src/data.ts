@@ -206,3 +206,14 @@ export const clearLocalStorage = () => {
     console.error('localStorage is not available');
   }
 }
+
+export const searchCrimes = (query: string) => {
+  if (!checkLocalStorage()) return [];
+  const currentData = JSON.parse(localStorage.getItem('crimes') || '[]') as CrimeType[];
+  const filteredData = currentData.filter((crime: CrimeType) => {
+    return (
+      crime.report_details.toLowerCase().includes(query.toLowerCase())
+    );
+  });
+  return filteredData;
+}
