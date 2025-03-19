@@ -4,7 +4,7 @@ import { Icon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { data } from '@/data';
+import { getCrimes } from '@/data';
 
 // Define marker icons for different crime types
 const crimeIcons = {
@@ -56,8 +56,9 @@ const statusColors = {
 };
 
 const MapComponent = () => {
+  const crimeData = getCrimes();
   const [selectedCrimeTypes, setSelectedCrimeTypes] = useState<string[]>(
-    [...new Set(data.crimes.map(crime => crime.crime_type))]
+    [...new Set(crimeData.map(crime => crime.crime_type))]
   );
 
   return (
@@ -68,7 +69,7 @@ const MapComponent = () => {
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-4">
-            {[...new Set(data.crimes.map(crime => crime.crime_type))].map((type) => (
+            {[...new Set(crimeData.map(crime => crime.crime_type))].map((type) => (
               <div key={type} className="flex items-center space-x-3 rounded-lg border p-2">
                 <label 
                   htmlFor={`filter-${type}`}
@@ -106,7 +107,7 @@ const MapComponent = () => {
           />
           <ZoomControl position="bottomright" />
           
-          {data.crimes
+          {crimeData
             .filter(crime => selectedCrimeTypes.includes(crime.crime_type))
             .map(crime => (
               <Marker
