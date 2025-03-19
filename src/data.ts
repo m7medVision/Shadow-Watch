@@ -25,6 +25,11 @@ export const setCrime = (crime: CrimeType) => {
   localStorage.setItem('crimes', JSON.stringify(currentData));
 }
 
+export const setCrimes = (crimes: CrimeType[]) => {
+  if (!checkLocalStorage()) return;
+  localStorage.setItem('crimes', JSON.stringify(crimes));
+}
+
 export const updateCrime = (id: number, updatedCrime: CrimeType) => {
   if (!checkLocalStorage()) return;
   const currentData = JSON.parse(localStorage.getItem('crimes') || '[]') as CrimeType[];
