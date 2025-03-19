@@ -23,7 +23,10 @@ import {
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { setCrime, getCrimes } from "@/data";
 import { CrimeType } from "@/types";
-import { toast } from "sonner";
+import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import { Icon } from "leaflet";
+import "leaflet/dist/leaflet.css";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 // Define the form schema with Zod
 const formSchema = z.object({
@@ -33,20 +36,49 @@ const formSchema = z.object({
   }),
   national_id: z.string().regex(/^\d+$/, "National ID must contain only numbers"),
   latitude: z.string().refine(
-    val => !isNaN(Number(val)) && Number(val) >= -90 && Number(val) <= 90,
+    val => !isNaN(Number(val)) && Number(val) >= -90 && Number(val) <= 90, 
     "Latitude must be between -90 and 90"
   ),
   longitude: z.string().refine(
-    val => !isNaN(Number(val)) && Number(val) >= -180 && Number(val) <= 180,
+    val => !isNaN(Number(val)) && Number(val) >= -180 && Number(val) <= 180, 
     "Longitude must be between -180 and 180"
   ),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
+// Define a marker icon
+const locationIcon = new Icon({
+  iconUrl: '/icons/pin.png',
+  iconSize: [38, 38],
+  iconAnchor: [19, 38],
+});
+
+// Component for handling map click events
+const LocationMarker = ({ 
+  selectLocationMode, 
+  setSelectedLocation 
+}: { 
+  selectLocationMode: boolean, 
+  setSelectedLocation: (lat: number, lng: number) => void 
+}) => {
+  useMapEvents({
+    click(e) {
+      if (selectLocationMode) {
+        setSelectedLocation(e.latlng.lat, e.latlng.lng);
+      }
+    },
+  });
+
+  return null;
+};
+
 const ReportCrime = () => {
   const [submitted, setSubmitted] = useState(false);
-
+  const [selectLocationMode, setSelectLocationMode] = useState(false);
+  const [markerPosition, setMarkerPosition] = useState<[number, number] | null>(null);
+  const [locationSelected, setLocationSelected] = useState(false);
+  
   // Initialize the form with react-hook-form and shadcn's form
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -59,12 +91,28 @@ const ReportCrime = () => {
     },
   });
 
+  // Function to set the selected location
+  const setSelectedLocation = (lat: number, lng: number) => {
+    setMarkerPosition([lat, lng]);
+    setLocationSelected(true);
+    setSelectLocationMode(false);
+  };
+
+  // Function to confirm the selected location and update form values
+  const confirmLocation = () => {
+    if (markerPosition) {
+      form.setValue('latitude', markerPosition[0].toString());
+      form.setValue('longitude', markerPosition[1].toString());
+      setLocationSelected(false);
+    }
+  };
+
   // Handle form submission
   const onSubmit = async (values: FormValues) => {
     // Format the date as YYYY-MM-DD-HH-MM
     const now = new Date();
     const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}-${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}`;
-
+    
     // Get existing crimes to determine the next ID
     const crimes = getCrimes();
     const newId = crimes.length > 0 ? Math.max(...crimes.map(c => c.id)) + 1 : 1;
@@ -82,8 +130,6 @@ const ReportCrime = () => {
     // Save the crime report
     setCrime(newCrime);
     setSubmitted(true);
-    
-    toast.success("Crime report submitted successfully");
 
     // Simulate loading
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -112,7 +158,7 @@ const ReportCrime = () => {
             Fill out the form below to report a crime to the authorities.
           </CardDescription>
         </CardHeader>
-
+        
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <CardContent className="space-y-4">
@@ -124,17 +170,17 @@ const ReportCrime = () => {
                   <FormItem>
                     <FormLabel>Report Details</FormLabel>
                     <FormControl>
-                      <Textarea
-                        placeholder="Please provide details about the incident"
+                      <Textarea 
+                        placeholder="Please provide details about the incident" 
                         rows={4}
-                        {...field}
+                        {...field} 
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
+              
               {/* Crime Type */}
               <FormField
                 control={form.control}
@@ -163,7 +209,7 @@ const ReportCrime = () => {
                   </FormItem>
                 )}
               />
-
+              
               {/* National ID */}
               <FormField
                 control={form.control}
@@ -172,16 +218,73 @@ const ReportCrime = () => {
                   <FormItem>
                     <FormLabel>National ID</FormLabel>
                     <FormControl>
-                      <Input
+                      <Input 
                         placeholder="Enter your national ID number"
-                        {...field}
+                        {...field} 
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
+              
+              {/* Interactive Location Selection Map */}
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <div className="text-sm font-medium">Crime Location</div>
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    onClick={() => setSelectLocationMode(!selectLocationMode)}
+                  >
+                    {selectLocationMode ? "Cancel Selection" : "Select Crime Location"}
+                  </Button>
+                </div>
+                
+                {selectLocationMode && (
+                  <Alert variant="default" className="bg-blue-50 text-blue-800 mb-2">
+                    <AlertDescription>
+                      Click on the map to select the crime location
+                    </AlertDescription>
+                  </Alert>
+                )}
+                
+                <div className="h-[300px] w-full border rounded-md overflow-hidden">
+                  <MapContainer 
+                    center={[23.58, 58.38]} 
+                    zoom={13} 
+                    style={{ height: '100%', width: '100%' }}
+                    attributionControl={false}
+                  >
+                    <TileLayer
+                      url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                    />
+                    <LocationMarker 
+                      selectLocationMode={selectLocationMode} 
+                      setSelectedLocation={setSelectedLocation} 
+                    />
+                    {markerPosition && (
+                      <Marker 
+                        position={markerPosition} 
+                        icon={locationIcon}
+                      />
+                    )}
+                  </MapContainer>
+                </div>
+                
+                {locationSelected && (
+                  <div className="flex justify-center">
+                    <Button 
+                      type="button" 
+                      onClick={confirmLocation}
+                      className="w-full"
+                    >
+                      Confirm Location
+                    </Button>
+                  </div>
+                )}
+              </div>
+              
               <div className="grid grid-cols-2 gap-4">
                 {/* Latitude */}
                 <FormField
@@ -191,16 +294,16 @@ const ReportCrime = () => {
                     <FormItem>
                       <FormLabel>Latitude</FormLabel>
                       <FormControl>
-                        <Input
+                        <Input 
                           placeholder="e.g. 23.5880"
-                          {...field}
+                          {...field} 
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-
+                
                 {/* Longitude */}
                 <FormField
                   control={form.control}
@@ -209,9 +312,9 @@ const ReportCrime = () => {
                     <FormItem>
                       <FormLabel>Longitude</FormLabel>
                       <FormControl>
-                        <Input
+                        <Input 
                           placeholder="e.g. 58.3829"
-                          {...field}
+                          {...field} 
                         />
                       </FormControl>
                       <FormMessage />
@@ -220,11 +323,11 @@ const ReportCrime = () => {
                 />
               </div>
             </CardContent>
-
+            
             <CardFooter>
               <Button
-                className="w-full my-2"
-                type="submit"
+                className="w-full my-2" 
+                type="submit" 
                 disabled={form.formState.isSubmitting}
               >
                 {form.formState.isSubmitting ? "Submitting..." : "Submit Report"}
