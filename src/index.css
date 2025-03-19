@@ -217,3 +217,15 @@
     @apply bg-background text-foreground;
   }
 }
+
+.redicon {
+filter: brightness(0) saturate(100%) invert(12%) sepia(100%) saturate(5831%) hue-rotate(0deg) brightness(103%) contrast(112%);
+color: #ff0000;
+}
+
+/* Target SVG elements specifically */
+.redicon svg path,
+.redicon img {
+fill: #ff0000;
+stroke: #ff0000;
+}

@@ -12,37 +12,37 @@ const crimeIcons = {
     iconUrl: '/icons/robbery.png',
     iconSize: [35, 35], // Increased size
     iconAnchor: [17.5, 35],
-    className: 'text-red-500', // Added color class
+    className: 'redicon',
   }),
   Assault: new Icon({
     iconUrl: '/icons/assault.png',
     iconSize: [35, 35],
     iconAnchor: [17.5, 35],
-    className: 'text-blue-500',
+    className: 'redicon',
   }),
   Homicide: new Icon({
     iconUrl: '/icons/homicide.png',
     iconSize: [35, 35],
     iconAnchor: [17.5, 35],
-    className: 'text-black',
+    className: 'redicon',
   }),
   Kidnapping: new Icon({
     iconUrl: '/icons/kidnapping.png',
     iconSize: [35, 35],
     iconAnchor: [17.5, 35],
-    className: 'text-purple-500',
+    className: 'redicon',
   }),
   Theft: new Icon({
     iconUrl: '/icons/theft.png',
     iconSize: [35, 35],
     iconAnchor: [17.5, 35],
-    className: 'text-green-500',
+    className: 'redicon',
   }),
   Default: new Icon({
     iconUrl: '/icons/default.png',
     iconSize: [35, 35],
     iconAnchor: [17.5, 35],
-    className: 'text-gray-500',
+    className: 'redicon',
   }),
 };
 
@@ -103,7 +103,7 @@ const MapComponent = () => {
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
           />
           <ZoomControl position="bottomright" />
           
@@ -113,6 +113,7 @@ const MapComponent = () => {
               <Marker
                 key={crime.id}
                 position={[crime.latitude, crime.longitude]}
+                
                 icon={crimeIcons[crime.crime_type as keyof typeof crimeIcons] || crimeIcons.Default}
               >
                 <Popup>
