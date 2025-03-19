@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Button } from './ui/button';
-import { Menu, X, Shield, Download, Upload } from 'lucide-react';
+import { Menu, X, Shield, Download, Upload, Delete } from 'lucide-react';
 import { toast } from 'sonner';
-import { getCrimes, setCrime } from '@/data';
+import { getCrimes, setCrime, clearLocalStorage } from '@/data';
 import { CrimeType } from '@/types';
 
 interface NavbarProps {
@@ -32,7 +32,16 @@ const Navbar = ({ currentPage, setCurrentPage }: NavbarProps) => {
       console.error('Export error:', error);
     }
   };
-
+ const handleDeleteAll = () => {
+    const confirmDelete = window.confirm("Are you sure you want to delete all data?");
+    if (confirmDelete) {
+      clearLocalStorage();
+      toast.success('All data deleted successfully');
+      setCrime({} as CrimeType); // Reset the state
+    } else {
+      toast.error('Data deletion canceled');
+    }
+  };
   const handleImport = () => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -111,6 +120,14 @@ const Navbar = ({ currentPage, setCurrentPage }: NavbarProps) => {
           >
             <Upload size={16} />
             Import
+          </Button>
+          <Button 
+            variant="outline"
+            onClick={handleDeleteAll}
+            className="flex items-center gap-2"
+          >
+            <Delete size={16} />
+            Delete all data
           </Button>
         </div>
         

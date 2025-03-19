@@ -149,37 +149,38 @@ const MapComponent = () => {
           />
           <ZoomControl position="bottomright" />
 
-          {crimeData
-            .filter(crime => selectedCrimeTypes.includes(crime.crime_type))
-            .map(crime => (
-              <Marker
-                key={crime.id}
-                position={[crime.latitude, crime.longitude]}
+          {crimeData.length > 0 &&
+            crimeData
+              .filter(crime => selectedCrimeTypes.includes(crime.crime_type))
+              .map(crime => (
+                <Marker
+                  key={crime.id}
+                  position={[crime.latitude, crime.longitude]}
+                  icon={crimeIcons[crime.crime_type as keyof typeof crimeIcons] || crimeIcons.Default}
+                >
+                  <Popup>
+                    <div className="max-w-xs">
+                      <h3 className="font-bold text-lg">{crime.crime_type}</h3>
+                      <p className="text-sm mt-1">{crime.report_details}</p>
 
-                icon={crimeIcons[crime.crime_type as keyof typeof crimeIcons] || crimeIcons.Default}
-              >
-                <Popup>
-                  <div className="max-w-xs">
-                    <h3 className="font-bold text-lg">{crime.crime_type}</h3>
-                    <p className="text-sm mt-1">{crime.report_details}</p>
+                      <div className="mt-2">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[crime.report_status as keyof typeof statusColors] || "bg-gray-100"}`}>
+                          {crime.report_status}
+                        </span>
+                      </div>
 
-                    <div className="mt-2">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[crime.report_status as keyof typeof statusColors] || "bg-gray-100"}`}>
-                        {crime.report_status}
-                      </span>
+                      <div className="mt-2 text-xs text-gray-500">
+                        Reported: {crime.report_date_time.replace(/-/g, ' ').replace(/(\d{4}) (\d{2}) (\d{2}) (\d{2}) (\d{2})/, '$1-$2-$3 $4:$5')}
+                      </div>
+
+                      <div className="mt-1 text-xs text-gray-500">
+                        Location: {crime.latitude.toFixed(4)}, {crime.longitude.toFixed(4)}
+                      </div>
                     </div>
-
-                    <div className="mt-2 text-xs text-gray-500">
-                      Reported: {crime.report_date_time.replace(/-/g, ' ').replace(/(\d{4}) (\d{2}) (\d{2}) (\d{2}) (\d{2})/, '$1-$2-$3 $4:$5')}
-                    </div>
-
-                    <div className="mt-1 text-xs text-gray-500">
-                      Location: {crime.latitude.toFixed(4)}, {crime.longitude.toFixed(4)}
-                    </div>
-                  </div>
-                </Popup>
-              </Marker>
-            ))}
+                  </Popup>
+                </Marker>
+              ))
+          }
         </MapContainer>
       </div>
     </div>

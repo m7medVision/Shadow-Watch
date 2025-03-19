@@ -152,11 +152,7 @@ const checkLocalStorage = () => {
 
 export const getCrimes = () => {
   if (!checkLocalStorage()) return [];
-
-  // Check if the data is already in localStorage
-  // If not, set it to the initial data
-  localStorage.getItem('crimes') || localStorage.setItem('crimes', JSON.stringify(data.crimes));
-  return JSON.parse(localStorage.getItem('crimes') || '{}') as CrimeType[];
+  return JSON.parse(localStorage.getItem('crimes') || '[]') as CrimeType[];
 }
 
 export const setCrime = (crime: CrimeType) => {
