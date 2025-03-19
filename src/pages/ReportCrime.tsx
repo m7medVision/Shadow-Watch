@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -23,6 +23,10 @@ import {
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { setCrime, getCrimes } from "@/data";
 import { CrimeType } from "@/types";
+import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import { Icon } from "leaflet";
+import "leaflet/dist/leaflet.css";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 // Define the form schema with Zod
 const formSchema = z.object({
@@ -43,8 +47,37 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
+// Define a marker icon
+const locationIcon = new Icon({
+  iconUrl: '/icons/pin.png',
+  iconSize: [38, 38],
+  iconAnchor: [19, 38],
+});
+
+// Component for handling map click events
+const LocationMarker = ({ 
+  selectLocationMode, 
+  setSelectedLocation 
+}: { 
+  selectLocationMode: boolean, 
+  setSelectedLocation: (lat: number, lng: number) => void 
+}) => {
+  useMapEvents({
+    click(e) {
+      if (selectLocationMode) {
+        setSelectedLocation(e.latlng.lat, e.latlng.lng);
+      }
+    },
+  });
+
+  return null;
+};
+
 const ReportCrime = () => {
   const [submitted, setSubmitted] = useState(false);
+  const [selectLocationMode, setSelectLocationMode] = useState(false);
+  const [markerPosition, setMarkerPosition] = useState<[number, number] | null>(null);
+  const [locationSelected, setLocationSelected] = useState(false);
   
   // Initialize the form with react-hook-form and shadcn's form
   const form = useForm<FormValues>({
@@ -57,6 +90,22 @@ const ReportCrime = () => {
       longitude: "",
     },
   });
+
+  // Function to set the selected location
+  const setSelectedLocation = (lat: number, lng: number) => {
+    setMarkerPosition([lat, lng]);
+    setLocationSelected(true);
+    setSelectLocationMode(false);
+  };
+
+  // Function to confirm the selected location and update form values
+  const confirmLocation = () => {
+    if (markerPosition) {
+      form.setValue('latitude', markerPosition[0].toString());
+      form.setValue('longitude', markerPosition[1].toString());
+      setLocationSelected(false);
+    }
+  };
 
   // Handle form submission
   const onSubmit = async (values: FormValues) => {
@@ -178,6 +227,63 @@ const ReportCrime = () => {
                   </FormItem>
                 )}
               />
+              
+              {/* Interactive Location Selection Map */}
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <div className="text-sm font-medium">Crime Location</div>
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    onClick={() => setSelectLocationMode(!selectLocationMode)}
+                  >
+                    {selectLocationMode ? "Cancel Selection" : "Select Crime Location"}
+                  </Button>
+                </div>
+                
+                {selectLocationMode && (
+                  <Alert variant="default" className="bg-blue-50 text-blue-800 mb-2">
+                    <AlertDescription>
+                      Click on the map to select the crime location
+                    </AlertDescription>
+                  </Alert>
+                )}
+                
+                <div className="h-[300px] w-full border rounded-md overflow-hidden">
+                  <MapContainer 
+                    center={[23.58, 58.38]} 
+                    zoom={13} 
+                    style={{ height: '100%', width: '100%' }}
+                  >
+                    <TileLayer
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                      url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                    />
+                    <LocationMarker 
+                      selectLocationMode={selectLocationMode} 
+                      setSelectedLocation={setSelectedLocation} 
+                    />
+                    {markerPosition && (
+                      <Marker 
+                        position={markerPosition} 
+                        icon={locationIcon}
+                      />
+                    )}
+                  </MapContainer>
+                </div>
+                
+                {locationSelected && (
+                  <div className="flex justify-center">
+                    <Button 
+                      type="button" 
+                      onClick={confirmLocation}
+                      className="w-full"
+                    >
+                      Confirm Location
+                    </Button>
+                  </div>
+                )}
+              </div>
               
               <div className="grid grid-cols-2 gap-4">
                 {/* Latitude */}

@@ -43,11 +43,11 @@
   - [x] Implement open/close animation
 
 ## Phase 3: Advanced Features (Level 3)
-- [ ] Interactive Location Selection
-  - [ ] Implement "Select Crime Location" button
-  - [ ] Add map click event to drop location pin
-  - [ ] Auto-fill coordinates in form from pin position
-  - [ ] Create confirmation UI for location selection
+- [x] Interactive Location Selection
+  - [x] Implement "Select Crime Location" button
+  - [x] Add map click event to drop location pin
+  - [x] Auto-fill coordinates in form from pin position
+  - [x] Create confirmation UI for location selection
 - [ ] Search Functionality
   - [ ] Design search bar UI
   - [ ] Implement search by crime type
