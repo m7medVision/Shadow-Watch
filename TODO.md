@@ -48,14 +48,14 @@
   - [x] Add map click event to drop location pin
   - [x] Auto-fill coordinates in form from pin position
   - [x] Create confirmation UI for location selection
-- [ ] Search Functionality
-  - [ ] Design search bar UI
-  - [ ] Implement search by crime type
-  - [ ] Implement search by date
-  - [ ] Implement search by ID
-  - [ ] Show search results on map/list
+- [x] Search Functionality
+  - [x] Design search bar UI
+  - [x] Implement search by crime type
+  - [x] Implement search by date
+  - [x] Implement search by ID
+  - [x] Show search results on map/list
 - [ ] Data Persistence
-  - [ ] Set up robust local storage handling
+  - [x] Set up robust local storage handling
   - [ ] Implement data export/import functionality
   - [ ] Add error handling for data operations
 

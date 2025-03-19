@@ -208,11 +208,13 @@ export const clearLocalStorage = () => {
 }
 
 export const searchCrimes = (query: string, searchType: "id" | "details" = "details" ) => {
+  console.log("searching for: ", query);
+  console.log("searchType: ", searchType);
   if (!checkLocalStorage()) return [];
   const currentData = JSON.parse(localStorage.getItem('crimes') || '[]') as CrimeType[];
   if (searchType === "id") {
     const filteredData = currentData.filter((crime: CrimeType) => {
-      return crime.id.toString().includes(query);
+      return crime.id === parseInt(query);
     });
     return filteredData;
   }

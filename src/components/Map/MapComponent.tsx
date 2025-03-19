@@ -60,12 +60,13 @@ const MapComponent = () => {
   const [crimeData, setCrimeData] = useState(getCrimes());
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchType, setSearchType] = useState<"id"| "details">("details");
   const [selectedCrimeTypes, setSelectedCrimeTypes] = useState<string[]>(
     [...new Set(crimeData.map(crime => crime.crime_type))]
   );
   useEffect(() => {
     setLoading(true);
-    const newData = searchCrimes(searchTerm);
+    const newData = searchCrimes(searchTerm, searchType);
     setCrimeData(newData);
     setLoading(false);
   }, [searchTerm]);
@@ -76,26 +77,38 @@ const MapComponent = () => {
           <CardTitle>Crime Filter</CardTitle>
         </CardHeader>
         <CardContent className='p-4'>
-          <div className="mb-4">
+            <div className="mb-4">
             <div className="relative">
               <Input
-          type="text"
-          placeholder="Search crimes..."
-          aria-label="Search crimes"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+              type="text"
+              placeholder={searchType === "id" ? "Search by ID..." : "Search crime details..."}
+              aria-label="Search crimes"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               />
               <svg 
-          xmlns="http://www.w3.org/2000/svg" 
-          className="h-5 w-5 absolute right-3 top-2.5 text-gray-400" 
-          fill="none" 
-          viewBox="0 0 24 24" 
-          stroke="currentColor"
+              xmlns="http://www.w3.org/2000/svg" 
+              className="h-5 w-5 absolute right-3 top-2.5 text-gray-400" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
               >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
-          </div>
+            <div className="flex items-center space-x-2 mt-2">
+              <span className={`text-sm ${searchType === "id" ? "font-medium" : "text-gray-500"}`}>
+              Search by details
+              </span>
+              <Switch
+              checked={searchType === "id"}
+              onCheckedChange={(checked) => setSearchType(checked ? "id" : "details")}
+              />
+              <span className={`text-sm ${searchType === "id" ? "font-medium" : "text-gray-500"}`}>
+              Search by id
+              </span>
+            </div>
+            </div>
           
           <div className="flex flex-wrap gap-4">
             {[...new Set(crimeData.map(crime => crime.crime_type))].map((type) => (
