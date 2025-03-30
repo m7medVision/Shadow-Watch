@@ -6,6 +6,8 @@ import { Button } from '../ui/button';
 import { Icon } from 'leaflet';
 import { useNavigate } from 'react-router-dom';
 import { getCrimes, searchCrimes } from '@/data';
+import ImportData from '../DataManagement/ImportData';
+import ExportData from '../DataManagement/ExportData';
 
 // Define marker icons for different crime types
 const crimeIcons = {
@@ -184,6 +186,12 @@ const MapComponent = () => {
             </button>
           ))}
         </div>
+      </div>
+
+      {/* Data controls */}
+      <div className="absolute top-4 right-4 z-[1000] flex items-center gap-2">
+        <ImportData />
+        <ExportData />
       </div>
 
       {/* Floating Report Crime button */}
