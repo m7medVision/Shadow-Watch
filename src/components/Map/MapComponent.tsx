@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { getCrimes, searchCrimes } from '@/data';
 import ImportData from '../DataManagement/ImportData';
 import ExportData from '../DataManagement/ExportData';
+import ResetData from '../DataManagement/ResetData';
 
 // Define modern marker icons for different crime types
 const createMarkerIcon = (type: string) => {
@@ -173,6 +174,7 @@ const MapComponent = () => {
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex items-center gap-3 z-[1000]">
         <ImportData />
         <ExportData />
+        <ResetData />
         <Button 
           onClick={handleReportCrime}
           variant={"default"}
