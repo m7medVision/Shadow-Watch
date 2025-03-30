@@ -27,7 +27,7 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import { Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import SimpleNav from "@/components/SimpleNav";
+import NavBar from "@/components/SimpleNav";
 
 // Define the form schema with Zod
 const formSchema = z.object({
@@ -138,7 +138,7 @@ const ReportCrime = () => {
 
   return (
     <>
-      <SimpleNav title="Report Crime" />
+      <NavBar title="Report Crime" />
       <div className="container mx-auto py-8">
         {submitted ? (
           <Card className="max-w-md mx-auto">
