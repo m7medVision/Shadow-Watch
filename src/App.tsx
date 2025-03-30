@@ -1,19 +1,21 @@
 import './App.css'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Dashboard from "@/pages/Dashboard";
 import ReportCrime from '@/pages/ReportCrime';
-import { useState } from 'react';
 import Navbar from './components/Navbar';
 
 function App() {
-  const [currentPage, setCurrentPage] = useState<'dashboard' | 'report'>('dashboard');
-
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar currentPage={currentPage} setCurrentPage={setCurrentPage} />
-      <div className="container mx-auto p-4 pt-6">
-        {currentPage === 'dashboard' ? <Dashboard /> : <ReportCrime />}
+    <BrowserRouter>
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/report" element={<ReportCrime />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
       </div>
-    </div>
+    </BrowserRouter>
   );
 }
 

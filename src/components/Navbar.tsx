@@ -1,17 +1,14 @@
 import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Button } from './ui/button';
 import { Menu, X, Shield, Download, Upload, Delete } from 'lucide-react';
-// import { toast } from 'sonner';
 import { getCrimes, setCrimes, clearLocalStorage } from '@/data';
 import { CrimeType } from '@/types';
 
-interface NavbarProps {
-  currentPage: 'dashboard' | 'report';
-  setCurrentPage: (page: 'dashboard' | 'report') => void;
-}
-
-const Navbar = ({ currentPage, setCurrentPage }: NavbarProps) => {
+const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   const handleExport = () => {
     try {
@@ -89,21 +86,21 @@ const Navbar = ({ currentPage, setCurrentPage }: NavbarProps) => {
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-4">
           <Button 
-            variant={currentPage === 'dashboard' ? 'default' : 'ghost'} 
-            onClick={() => setCurrentPage('dashboard')}
+            variant={currentPath === '/' ? 'default' : 'ghost'} 
+            asChild
             className="px-6 transition-all duration-200 hover:scale-105"
           >
-            Dashboard
+            <Link to="/">Dashboard</Link>
           </Button>
           <Button 
-            variant={currentPage === 'report' ? 'default' : 'ghost'} 
-            onClick={() => setCurrentPage('report')}
+            variant={currentPath === '/report' ? 'default' : 'ghost'} 
+            asChild
             className="px-6 transition-all duration-200 hover:scale-105"
           >
-            Report Crime
+            <Link to="/report">Report Crime</Link>
           </Button>
           
-          {/* New Export and Import buttons */}
+          {/* Export and Import buttons */}
           <Button 
             variant="outline"
             onClick={handleExport}
@@ -148,24 +145,20 @@ const Navbar = ({ currentPage, setCurrentPage }: NavbarProps) => {
       >
         <div className="py-4 px-2 flex flex-col space-y-2 bg-background/95 backdrop-blur-sm rounded-b-lg shadow-lg">
           <Button 
-            variant={currentPage === 'dashboard' ? 'default' : 'ghost'} 
-            onClick={() => {
-              setCurrentPage('dashboard');
-              setIsMobileMenuOpen(false);
-            }}
+            variant={currentPath === '/' ? 'default' : 'ghost'} 
+            asChild
+            onClick={() => setIsMobileMenuOpen(false)}
             className="w-full justify-start text-lg"
           >
-            Dashboard
+            <Link to="/">Dashboard</Link>
           </Button>
           <Button 
-            variant={currentPage === 'report' ? 'default' : 'ghost'} 
-            onClick={() => {
-              setCurrentPage('report');
-              setIsMobileMenuOpen(false);
-            }}
+            variant={currentPath === '/report' ? 'default' : 'ghost'} 
+            asChild
+            onClick={() => setIsMobileMenuOpen(false)}
             className="w-full justify-start text-lg"
           >
-            Report Crime
+            <Link to="/report">Report Crime</Link>
           </Button>
           
           {/* Mobile Export and Import buttons */}
