@@ -47,7 +47,7 @@ const ExportData = () => {
       if (!open) resetExport();
     }}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="flex items-center gap-2 rounded-full bg-white/90 backdrop-blur-sm shadow-sm border border-gray-200">
+        <Button variant="outline">
           <Download size={18} />
           <span>Export</span>
         </Button>

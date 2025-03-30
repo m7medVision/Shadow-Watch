@@ -193,7 +193,7 @@ const MapComponent = () => {
         <ExportData />
         <Button 
           onClick={handleReportCrime}
-          className="px-6 py-6 rounded-full bg-primary hover:bg-primary/90 text-white font-bold shadow-lg flex items-center gap-2 text-lg"
+          variant={"default"}
         >
           <svg 
             xmlns="http://www.w3.org/2000/svg" 

@@ -88,7 +88,7 @@ const ImportData = () => {
       if (!open) resetImport();
     }}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="flex items-center gap-2 rounded-full bg-white/90 backdrop-blur-sm shadow-sm border border-gray-200">
+        <Button variant="outline">
           <Upload size={18} />
           <span>Import</span>
         </Button>
