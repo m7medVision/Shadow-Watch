@@ -93,7 +93,7 @@ const ImportData = () => {
           <span>Import</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md z-[1100] fixed">
         <DialogHeader>
           <DialogTitle>Import Crime Data</DialogTitle>
           <DialogDescription>

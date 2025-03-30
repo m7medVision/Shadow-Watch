@@ -52,7 +52,7 @@ const ExportData = () => {
           <span>Export</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md z-[1100] fixed">
         <DialogHeader>
           <DialogTitle>Export Crime Data</DialogTitle>
           <DialogDescription>
