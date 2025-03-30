@@ -3,50 +3,32 @@ import { MapContainer, TileLayer, Marker, Popup, ZoomControl } from 'react-leafl
 import 'leaflet/dist/leaflet.css';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
-import { Icon } from 'leaflet';
+import { DivIcon } from 'leaflet';
 import { useNavigate } from 'react-router-dom';
 import { getCrimes, searchCrimes } from '@/data';
 import ImportData from '../DataManagement/ImportData';
 import ExportData from '../DataManagement/ExportData';
 
-// Define marker icons for different crime types
+// Define modern marker icons for different crime types
+const createMarkerIcon = (type: string) => {
+  return new DivIcon({
+    html: `<div class="marker-icon marker-${type.toLowerCase()}">
+             <img src="/icons/${type.toLowerCase()}.png" alt="${type}" />
+           </div>`,
+    className: '',
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+  });
+};
+
+// Create icon instances
 const crimeIcons = {
-  Robbery: new Icon({
-    iconUrl: '/icons/robbery.png',
-    iconSize: [35, 35], // Increased size
-    iconAnchor: [17.5, 35],
-    className: 'redicon',
-  }),
-  Assault: new Icon({
-    iconUrl: '/icons/assault.png',
-    iconSize: [35, 35],
-    iconAnchor: [17.5, 35],
-    className: 'redicon',
-  }),
-  Homicide: new Icon({
-    iconUrl: '/icons/homicide.png',
-    iconSize: [35, 35],
-    iconAnchor: [17.5, 35],
-    className: 'redicon',
-  }),
-  Kidnapping: new Icon({
-    iconUrl: '/icons/kidnapping.png',
-    iconSize: [35, 35],
-    iconAnchor: [17.5, 35],
-    className: 'redicon',
-  }),
-  Theft: new Icon({
-    iconUrl: '/icons/theft.png',
-    iconSize: [35, 35],
-    iconAnchor: [17.5, 35],
-    className: 'redicon',
-  }),
-  Default: new Icon({
-    iconUrl: '/icons/default.png',
-    iconSize: [35, 35],
-    iconAnchor: [17.5, 35],
-    className: 'redicon',
-  }),
+  Robbery: createMarkerIcon('robbery'),
+  Assault: createMarkerIcon('assault'),
+  Homicide: createMarkerIcon('homicide'),
+  Kidnapping: createMarkerIcon('kidnapping'),
+  Theft: createMarkerIcon('theft'),
+  Default: createMarkerIcon('default'),
 };
 
 // Status color mapping

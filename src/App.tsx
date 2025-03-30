@@ -1,4 +1,3 @@
-import './App.css'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Dashboard from "@/pages/Dashboard";
 import ReportCrime from '@/pages/ReportCrime';
