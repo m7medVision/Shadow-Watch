@@ -180,7 +180,7 @@ const MapComponent = () => {
               <img 
                 src={`/icons/${type.toLowerCase()}.png`} 
                 alt={type}
-                className="w-5 h-5" 
+                className={`w-5 h-5 ${activeFilters.includes(type) ? 'whiteicon' : ''}`} 
               />
               <span className="font-medium">{type}</span>
             </button>
