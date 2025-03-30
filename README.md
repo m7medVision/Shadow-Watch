@@ -4,6 +4,11 @@
 
 Shadow Watch is built using a modern, robust tech stack focused on performance, developer experience, and user interface quality:
 
+<video width="320" height="240" controls>
+  <source src="https://github.com/m7medVision/Shadow-Watch/raw/refs/heads/master/Screencast%20From%202025-03-30%2014-16-48.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
 ### Core Technologies
 - **React 19.0.0** - Latest version of React for building the user interface
 - **TypeScript** - For type safety and enhanced developer experience
