@@ -188,29 +188,26 @@ const MapComponent = () => {
         </div>
       </div>
 
-      {/* Data controls */}
-      <div className="absolute top-4 right-4 z-[1000] flex items-center gap-2">
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex items-center gap-3 z-[1000]">
         <ImportData />
         <ExportData />
-      </div>
-
-      {/* Floating Report Crime button */}
-      <Button 
-        onClick={handleReportCrime}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 px-6 py-6 rounded-full bg-primary hover:bg-primary/90 text-white font-bold shadow-lg flex items-center gap-2 text-lg z-[1000]"
-      >
-        <svg 
-          xmlns="http://www.w3.org/2000/svg" 
-          fill="none" 
-          viewBox="0 0 24 24" 
-          strokeWidth={2} 
-          stroke="currentColor" 
-          className="w-6 h-6"
+        <Button 
+          onClick={handleReportCrime}
+          className="px-6 py-6 rounded-full bg-primary hover:bg-primary/90 text-white font-bold shadow-lg flex items-center gap-2 text-lg"
         >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-        </svg>
-        Report Crime
-      </Button>
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            strokeWidth={2} 
+            stroke="currentColor" 
+            className="w-6 h-6"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+          Report Crime
+        </Button>
+      </div>
     </div>
   );
 };

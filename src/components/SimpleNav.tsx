@@ -5,16 +5,16 @@ import ImportData from './DataManagement/ImportData';
 import ExportData from './DataManagement/ExportData';
 import { cn } from '@/lib/utils';
 
-interface NavBarProps {
+interface SimpleNavProps {
   showDataControls?: boolean;
   title?: string;
 }
 
-const NavBar = ({ showDataControls = false, title = "Shadow Watch" }: NavBarProps) => {
+const SimpleNav = ({ showDataControls = false, title = "Shadow Watch" }: SimpleNavProps) => {
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="w-full px-4 py-3">
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center justify-between gap-2">
           {/* Logo and Title */}
           <Link to="/" className="flex items-center gap-2 transition-colors hover:opacity-80">
             <div className="flex items-center justify-center size-9 rounded-lg bg-primary shadow-sm">
@@ -26,9 +26,20 @@ const NavBar = ({ showDataControls = false, title = "Shadow Watch" }: NavBarProp
           {/* Actions */}
           <div className="flex items-center gap-2">
             {showDataControls && (
-              <div className="flex items-center gap-2 pr-2 mr-2 border-r border-border/60">
-                <ImportData />
-                <ExportData />
+              <div className="flex items-center gap-2">
+                <div className="hidden sm:block">
+                  <ImportData />
+                </div>
+                <div className="hidden sm:block">
+                  <ExportData />
+                </div>
+                <div className="sm:hidden">
+                  <Button variant="outline" size="icon" className="rounded-full p-2" asChild>
+                    <Link to="/" title="Import/Export">
+                      <Shield size={18} />
+                    </Link>
+                  </Button>
+                </div>
               </div>
             )}
             
@@ -38,7 +49,7 @@ const NavBar = ({ showDataControls = false, title = "Shadow Watch" }: NavBarProp
             )}>
               <Link to="/" className="flex items-center gap-1.5">
                 <ArrowLeft size={16} />
-                <span>Back to Map</span>
+                <span className="hidden sm:inline">Back to Map</span>
               </Link>
             </Button>
           </div>
@@ -48,4 +59,4 @@ const NavBar = ({ showDataControls = false, title = "Shadow Watch" }: NavBarProp
   );
 };
 
-export default NavBar;
+export default SimpleNav;
